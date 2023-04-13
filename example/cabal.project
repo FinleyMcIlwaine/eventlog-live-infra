@@ -1,0 +1,6 @@
+packages: .
+
+source-repository-package
+  type: git
+  location: https://github.com/FinleyMcIlwaine/ghc-eventlog-socket
+  tag: e8cbc1a554d5146d4d0142e700be8ae3850e8d6a
