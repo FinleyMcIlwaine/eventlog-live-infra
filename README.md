@@ -66,10 +66,11 @@ Your application is now ready to be profiled using this infrastructure.
 
 ### Profiling
 
-Compile your application with the `-eventlog` GHC option to enable eventlog
-emission (and perhaps `-rtsopts` if you wish to supply heap profiling RTS
-options). Run your application with flags `+RTS -l --eventlog-flush-interval=1`
-to enable the eventlog and make the RTS flush the events queue every second.
+Compile your application with the `-eventlog -rtsopts` GHC options to link with
+the eventlog-capable RTS and allow heap profling RTS options. Run your
+application with flags `+RTS -l -hT --eventlog-flush-interval=1` to enable the
+eventlog, enable heap profiling, and make the RTS flush the events queue every
+second.
 
 Set the `GHC_EVENTLOG_SOCKET` environment variable to the path of the socket
 created by your instrumented application.
@@ -87,6 +88,28 @@ pane:
 Under "General", select "Heap Stats", and you will see a dashboard like the one
 at the top of this document.
 
+## Build the `eventlog-live` image yourself
+
+The Docker Compose configuration uses an image tagged
+`finleymcilwaine/eventlog-live`. This image contains the application which reads
+the eventlog data from the socket and inserts into InfluxDB using the
+[`eventlog-live`][eventlog-live] libraries. The image is hosted on my (Finley's)
+Docker Hub account. If you do not want to use the image I've published on Docker
+Hub, build it locally with the following command:
+
+```
+docker build -f eventlog-live.Dockerfile . -t <your tag>
+```
+
+Then replace the image name in `docker-compose.yml` with `<your tag>`:
+
+```yml
+...
+services:
+  eventlog-live:
+    image: "<your tag>"
+    ...
+```
 
 [docs:docker-compose]: https://docs.docker.com/compose/
 [docs:influxdb]: https://www.influxdata.com/
