@@ -4,6 +4,9 @@ services:
   eventlog-live:
     image: "finleymcilwaine/eventlog-live:0.1.0"
     restart: "always"
+    depends_on:
+      influxdb:
+        condition: "service_started"
     environment:
       GHC_EVENTLOG_SOCKET: "/tmp/ghc-eventlog-socket"
       GHC_EVENTLOG_INFLUXDB_HOST: "influxdb"
@@ -11,8 +14,8 @@ services:
       GHC_EVENTLOG_INFLUXDB_USERNAME: "admin"
       GHC_EVENTLOG_INFLUXDB_PASSWORD: "admin"
     volumes:
-    - ${GHC_EVENTLOG_SOCKET:-/tmp/ghc-eventlog-socket}:/tmp/ghc-eventlog-socket
-    command: sleep 10m
+    - "${GHC_EVENTLOG_SOCKET:-/tmp/ghc-eventlog-socket}:/tmp/ghc-eventlog-socket"
+    command: "bash -c \"sleep 10s && eventlog-influxdb\""
 
   influxdb:
     image: "influxdb:1.8"
@@ -100,44 +103,7 @@ services:
           "fiscalYearStartMonth": 0,
           "graphTooltip": 0,
           "id": 2,
-          "links": [
-            {
-              "asDropdown": false,
-              "icon": "bolt",
-              "includeVars": false,
-              "keepTime": false,
-              "tags": [],
-              "targetBlank": true,
-              "title": "Request Heap Census",
-              "tooltip": "Request a heap census on graphql-engine",
-              "type": "link",
-              "url": "http://localhost:8080/dev/heap_census"
-            },
-            {
-              "asDropdown": false,
-              "icon": "bolt",
-              "includeVars": false,
-              "keepTime": false,
-              "tags": [],
-              "targetBlank": true,
-              "title": "Start Heap Profiling",
-              "tooltip": "Start heap profiling",
-              "type": "link",
-              "url": "http://localhost:8080/dev/start_heap_profile"
-            },
-            {
-              "asDropdown": false,
-              "icon": "bolt",
-              "includeVars": false,
-              "keepTime": false,
-              "tags": [],
-              "targetBlank": true,
-              "title": "Stop Heap Profiling",
-              "tooltip": "Stop heap profiling",
-              "type": "link",
-              "url": "http://localhost:8080/dev/stop_heap_profile"
-            }
-          ],
+          "links": [],
           "liveNow": false,
           "panels": [
             {

@@ -1,0 +1,4 @@
+cradle:
+  cabal:
+    - path: "././Main.hs"
+      component: "example:exe:example"
