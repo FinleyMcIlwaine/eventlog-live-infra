@@ -11,6 +11,23 @@ environment variable, and `docker compose up`.
 
 ![](./assets/img/dashboard.png)
 
+## :warning: Important note :warning:
+
+Since this infrstructure works by mounting the eventlog socket into a Docker
+container, it will likely never work as-is on non-linux hosts. See
+[this issue](https://github.com/docker/for-mac/issues/483) on the Docker For Mac
+repo to understand why.
+
+If you are on a Mac, two workarounds (however painful) come to mind:
+- Dockerize your application so that it may also exist as a service in this
+  Docker Compose configuration. Then share a volume holding the eventlog socket
+  between your application's service and the `eventlog-live` service.
+- Do not use Docker at all and run all of these services locally as they are
+  declared in the configuration file.
+
+This limitation will hopefully be addressed soon with updates to
+`ghc-eventlog-socket`.
+
 ## Example
 
 The [`./example`](./example/) directory contains a minimal example of an
@@ -75,8 +92,10 @@ second.
 Set the `GHC_EVENTLOG_SOCKET` environment variable to the path of the socket
 created by your instrumented application.
 
-Lastly, just `docker compose up`. You should be able to navigate to the Grafana
-instance at `localhost:3000`. Use username and password `admin` and `admin`.
+Lastly, just `docker compose up` in a directory where you have dowloaded the
+`docker-compose.yml` file from this repository. You should be able to navigate
+to the Grafana instance at `localhost:3000`. Use username and password `admin`
+and `admin`.
 
 The InfluxDB datasource is already configured in the Grafana instance, so you
 can now start making your own dashboards. There is also already an example
