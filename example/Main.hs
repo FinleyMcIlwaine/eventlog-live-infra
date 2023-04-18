@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase          #-}
 {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE TypeApplications    #-}
 
@@ -6,6 +5,7 @@ module Main where
 
 import Control.Concurrent
 import Control.Monad
+import Data.Maybe
 import Debug.Trace
 import System.Environment
 import System.Random
@@ -15,10 +15,7 @@ import GHC.Eventlog.Socket qualified
 main :: IO ()
 main = do
     -- Example of getting the socket path from the environment with a default
-    socketPath <-
-      lookupEnv "GHC_EVENTLOG_SOCKET" >>= \case
-        Nothing -> return "/tmp/ghc-eventlog-socket"
-        Just p  -> return p
+    socketPath <- fromMaybe "/tmp/ghc-eventlog-socket" <$> lookupEnv "GHC_EVENTLOG_SOCKET"
 
     -- Simple to start
     GHC.Eventlog.Socket.start socketPath
