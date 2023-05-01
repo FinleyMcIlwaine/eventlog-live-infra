@@ -85,7 +85,7 @@ Your application is now ready to be profiled using this infrastructure.
 
 Compile your application with the `-eventlog -rtsopts` GHC options to link with
 the eventlog-capable RTS and allow heap profling RTS options. Run your
-application with flags `+RTS -l -hT --eventlog-flush-interval=1` to enable the
+application with flags `+RTS -l -hT --eventlog-flush-interval=1 --no-automatic-heap-samples` to enable the
 eventlog, enable heap profiling, and make the RTS flush the events queue every
 second.
 
